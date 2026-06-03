@@ -1,0 +1,138 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: database
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /data/greenops/postgres
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: database
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: redis-pv
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: cache
+spec:
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /data/greenops/redis
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: prometheus-pv
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: monitoring
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /data/greenops/prometheus
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 20Gi
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: grafana-pv
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: monitoring
+spec:
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: standard
+  hostPath:
+    path: /data/greenops/grafana
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: monitoring
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: standard
+  resources:
+    requests:
+      storage: 5Gi

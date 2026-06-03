@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(docker compose -f \"c:\\\\Users\\\\homel\\\\Desktop\\\\GreenOps-Platform\\\\docker-compose.yml\" ps --format json 2>&1)",
+      "PowerShell(docker run --rm -v \"c:/Users/homel/Desktop/GreenOps-Platform/backend/api-gateway:/app\" -w /app node:20-alpine npm install --package-lock-only 2>&1)",
+      "PowerShell(tail -5)"
+    ]
+  }
+}

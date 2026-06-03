@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: greenops-app-config
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+data:
+  NODE_ENV: "production"
+  DB_HOST: "postgres-service"
+  DB_PORT: "5432"
+  DB_NAME: "greenops"
+  DB_USER: "greenops"
+  REDIS_URL: "redis://redis-service:6379"
+  JWT_EXPIRES_IN: "15m"
+  REFRESH_EXPIRES_IN: "7d"
+  AUTH_SERVICE_URL: "http://auth-service:3001"
+  METRICS_SERVICE_URL: "http://metrics-service:3002"
+  CORS_ORIGIN: "https://greenops.local"
+  LOG_LEVEL: "info"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: monitoring
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+      external_labels:
+        monitor: 'greenops-k8s'
+        environment: 'production'
+
+    scrape_configs:
+      - job_name: 'prometheus'
+        static_configs:
+          - targets: ['localhost:9090']
+
+      - job_name: 'api-gateway'
+        static_configs:
+          - targets: ['api-gateway:3000']
+        metrics_path: '/metrics'
+
+      - job_name: 'auth-service'
+        static_configs:
+          - targets: ['auth-service:3001']
+        metrics_path: '/metrics'
+
+      - job_name: 'metrics-service'
+        static_configs:
+          - targets: ['metrics-service:3002']
+        metrics_path: '/metrics'
+
+      - job_name: 'kubernetes-pods'
+        kubernetes_sd_configs:
+          - role: pod
+            namespaces:
+              names: ['greenops']
+        relabel_configs:
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]
+            action: keep
+            regex: 'true'
+          - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]
+            action: replace
+            target_label: __metrics_path__
+            regex: (.+)
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: greenops
+  labels:
+    app.kubernetes.io/name: greenops-platform
+    app.kubernetes.io/component: proxy
+data:
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name _;
+        root /usr/share/nginx/html;
+        index index.html;
+        gzip on;
+        gzip_types text/plain text/css application/json application/javascript;
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+        location /health {
+            access_log off;
+            return 200 "ok\n";
+            add_header Content-Type text/plain;
+        }
+        location /static/ {
+            expires 1y;
+            add_header Cache-Control "public, immutable";
+        }
+    }

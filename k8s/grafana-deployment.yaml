@@ -41,9 +41,7 @@ spec:
                   name: greenops-grafana-secret
                   key: GF_SECURITY_ADMIN_PASSWORD
             - name: GF_SERVER_ROOT_URL
-              value: "https://greenops.local/grafana/"
-            - name: GF_SERVER_SERVE_FROM_SUB_PATH
-              value: "true"
+              value: "http://greenops.local:3001"
             - name: GF_USERS_ALLOW_SIGN_UP
               value: "false"
           volumeMounts:

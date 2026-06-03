@@ -32,7 +32,7 @@ spec:
         runAsGroup: 1001
       containers:
         - name: auth-service
-          image: greenops/auth-service:latest
+          image: ghcr.io/oreo53341/greenops/auth-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3001

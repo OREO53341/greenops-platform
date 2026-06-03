@@ -28,7 +28,7 @@ spec:
         runAsGroup: 1001
       containers:
         - name: frontend
-          image: greenops/frontend:latest
+          image: ghcr.io/oreo53341/greenops/frontend:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80

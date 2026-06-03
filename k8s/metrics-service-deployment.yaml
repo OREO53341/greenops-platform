@@ -32,7 +32,7 @@ spec:
         runAsGroup: 1001
       containers:
         - name: metrics-service
-          image: greenops/metrics-service:latest
+          image: ghcr.io/oreo53341/greenops/metrics-service:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3002

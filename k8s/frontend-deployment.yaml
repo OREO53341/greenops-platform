@@ -22,10 +22,8 @@ spec:
       labels:
         app: frontend
     spec:
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 1001
-        runAsGroup: 1001
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: frontend
           image: ghcr.io/oreo53341/greenops/frontend:latest
